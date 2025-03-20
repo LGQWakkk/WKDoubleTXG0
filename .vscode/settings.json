@@ -1,0 +1,22 @@
+{
+    "files.associations": {
+        "main.h": "c",
+        "system.h": "c",
+        "tim.h": "c",
+        "gpio.h": "c",
+        "limits": "cpp",
+        "type_traits": "cpp",
+        "stdint.h": "c",
+        "si24r1.h": "c",
+        "usart.h": "c",
+        "serial.h": "c",
+        "stdio.h": "c",
+        "spi.h": "c",
+        "string.h": "c",
+        "stdbool.h": "c",
+        "stdlib.h": "c",
+        "dma.h": "c"
+    },
+    "editor.tabSize": 4,
+    "editor.detectIndentation":false
+}
