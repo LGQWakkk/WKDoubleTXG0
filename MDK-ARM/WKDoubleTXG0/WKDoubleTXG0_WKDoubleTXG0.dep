@@ -1,6 +1,6 @@
 Dependencies for Project 'WKDoubleTXG0', Target 'WKDoubleTXG0': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
-F (startup_stm32g030xx.s)(0x67D2C21B)(--cpu Cortex-M0+ -g --apcs=interwork -I.\RTE\_WKDoubleTXG0-IC:\Users\31615\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\31615\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include--pd "__UVISION_VERSION SETA 534" --pd "_RTE_ SETA 1" --pd "STM32G030xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32g030xx.lst --xref -o wkdoubletxg0\startup_stm32g030xx.o --depend wkdoubletxg0\startup_stm32g030xx.d)
+F (startup_stm32g030xx.s)(0x67DCDB6E)(--cpu Cortex-M0+ -g --apcs=interwork -I.\RTE\_WKDoubleTXG0-IC:\Users\31615\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\31615\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include--pd "__UVISION_VERSION SETA 534" --pd "_RTE_ SETA 1" --pd "STM32G030xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32g030xx.lst --xref -o wkdoubletxg0\startup_stm32g030xx.o --depend wkdoubletxg0\startup_stm32g030xx.d)
 F (../Core/Src/main.c)(0x67D18830)(--c99 -c --cpu Cortex-M0+ -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../Components-I.\RTE\_WKDoubleTXG0-IC:\Users\31615\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\31615\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32G030xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G030xx-o wkdoubletxg0\main.o --omf_browse wkdoubletxg0\main.crf --depend wkdoubletxg0\main.d)
 I (../Core/Inc/main.h)(0x67B08F69)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h)(0x679D89C8)
@@ -43,7 +43,7 @@ I (../Core/Inc/spi.h)(0x67B08F68)
 I (../Core/Inc/tim.h)(0x67D1880E)
 I (../Core/Inc/usart.h)(0x67B08F68)
 I (../Core/Inc/gpio.h)(0x67B08F68)
-I (../Components/system.h)(0x67DBF492)
+I (../Components/system.h)(0x67DC130B)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5E8E3CC2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5E8E3CC2)
 F (../Core/Src/gpio.c)(0x67CEF5F7)(--c99 -c --cpu Cortex-M0+ -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../Components-I.\RTE\_WKDoubleTXG0-IC:\Users\31615\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\31615\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32G030xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G030xx-o wkdoubletxg0\gpio.o --omf_browse wkdoubletxg0\gpio.crf --depend wkdoubletxg0\gpio.d)
@@ -160,7 +160,7 @@ I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim.h)(0x679D89C8)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim_ex.h)(0x679D89C8)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h)(0x679D89C8)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h)(0x679D89C8)
-F (../Core/Src/tim.c)(0x67D1880E)(--c99 -c --cpu Cortex-M0+ -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../Components-I.\RTE\_WKDoubleTXG0-IC:\Users\31615\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\31615\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32G030xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G030xx-o wkdoubletxg0\tim.o --omf_browse wkdoubletxg0\tim.crf --depend wkdoubletxg0\tim.d)
+F (../Core/Src/tim.c)(0x67DCD90D)(--c99 -c --cpu Cortex-M0+ -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../Components-I.\RTE\_WKDoubleTXG0-IC:\Users\31615\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\31615\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32G030xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G030xx-o wkdoubletxg0\tim.o --omf_browse wkdoubletxg0\tim.crf --depend wkdoubletxg0\tim.d)
 I (../Core/Inc/tim.h)(0x67D1880E)
 I (../Core/Inc/main.h)(0x67B08F69)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h)(0x679D89C8)
@@ -198,7 +198,7 @@ I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim.h)(0x679D89C8)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim_ex.h)(0x679D89C8)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h)(0x679D89C8)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h)(0x679D89C8)
-F (../Core/Src/usart.c)(0x67D2C21A)(--c99 -c --cpu Cortex-M0+ -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../Components-I.\RTE\_WKDoubleTXG0-IC:\Users\31615\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\31615\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32G030xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G030xx-o wkdoubletxg0\usart.o --omf_browse wkdoubletxg0\usart.crf --depend wkdoubletxg0\usart.d)
+F (../Core/Src/usart.c)(0x67DCDB6D)(--c99 -c --cpu Cortex-M0+ -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../Components-I.\RTE\_WKDoubleTXG0-IC:\Users\31615\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\31615\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32G030xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G030xx-o wkdoubletxg0\usart.o --omf_browse wkdoubletxg0\usart.crf --depend wkdoubletxg0\usart.d)
 I (../Core/Inc/usart.h)(0x67B08F68)
 I (../Core/Inc/main.h)(0x67B08F69)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h)(0x679D89C8)
@@ -997,8 +997,8 @@ I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim.h)(0x679D89C8)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim_ex.h)(0x679D89C8)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h)(0x679D89C8)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h)(0x679D89C8)
-F (..\Components\system.c)(0x67DBFB76)(--c99 -c --cpu Cortex-M0+ -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../Components-I.\RTE\_WKDoubleTXG0-IC:\Users\31615\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\31615\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32G030xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G030xx-o wkdoubletxg0\system.o --omf_browse wkdoubletxg0\system.crf --depend wkdoubletxg0\system.d)
-I (..\Components\system.h)(0x67DBF492)
+F (..\Components\system.c)(0x67DCDE9A)(--c99 -c --cpu Cortex-M0+ -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../Components-I.\RTE\_WKDoubleTXG0-IC:\Users\31615\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\31615\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32G030xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G030xx-o wkdoubletxg0\system.o --omf_browse wkdoubletxg0\system.crf --depend wkdoubletxg0\system.d)
+I (..\Components\system.h)(0x67DC130B)
 I (../Core/Inc/main.h)(0x67B08F69)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h)(0x679D89C8)
 I (../Core/Inc/stm32g0xx_hal_conf.h)(0x67B08F69)
@@ -1039,17 +1039,17 @@ I (../Core/Inc/tim.h)(0x67D1880E)
 I (../Core/Inc/gpio.h)(0x67B08F68)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5E8E3CC2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5E8E3CC2)
-I (..\Components\si24r1.h)(0x67D2BA66)
+I (..\Components\si24r1.h)(0x67DC1303)
 I (../Core/Inc/usart.h)(0x67B08F68)
 I (../Core/Inc/spi.h)(0x67B08F68)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5E8E3CC2)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5E8E3CC2)
-I (..\Components\serial.h)(0x67DBF5E9)
-F (..\Components\serial.c)(0x67DBFAEA)(--c99 -c --cpu Cortex-M0+ -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../Components-I.\RTE\_WKDoubleTXG0-IC:\Users\31615\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\31615\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32G030xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G030xx-o wkdoubletxg0\serial.o --omf_browse wkdoubletxg0\serial.crf --depend wkdoubletxg0\serial.d)
-I (..\Components\serial.h)(0x67DBF5E9)
+I (..\Components\serial.h)(0x67DC12DF)
+F (..\Components\serial.c)(0x67DCDDD7)(--c99 -c --cpu Cortex-M0+ -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../Components-I.\RTE\_WKDoubleTXG0-IC:\Users\31615\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\31615\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32G030xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G030xx-o wkdoubletxg0\serial.o --omf_browse wkdoubletxg0\serial.crf --depend wkdoubletxg0\serial.d)
+I (..\Components\serial.h)(0x67DC12DF)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5E8E3CC2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5E8E3CC2)
-I (..\Components\si24r1.h)(0x67D2BA66)
+I (..\Components\si24r1.h)(0x67DC1303)
 I (../Core/Inc/main.h)(0x67B08F69)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h)(0x679D89C8)
 I (../Core/Inc/stm32g0xx_hal_conf.h)(0x67B08F69)
@@ -1091,10 +1091,10 @@ I (../Core/Inc/spi.h)(0x67B08F68)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5E8E3CC2)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5E8E3CC2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5E8E3CC2)
-I (..\Components\system.h)(0x67DBF492)
+I (..\Components\system.h)(0x67DC130B)
 I (../Core/Inc/tim.h)(0x67D1880E)
-F (..\Components\si24r1.c)(0x67DADB7A)(--c99 -c --cpu Cortex-M0+ -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../Components-I.\RTE\_WKDoubleTXG0-IC:\Users\31615\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\31615\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32G030xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G030xx-o wkdoubletxg0\si24r1.o --omf_browse wkdoubletxg0\si24r1.crf --depend wkdoubletxg0\si24r1.d)
-I (..\Components\si24r1.h)(0x67D2BA66)
+F (..\Components\si24r1.c)(0x67DCD7ED)(--c99 -c --cpu Cortex-M0+ -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../Components-I.\RTE\_WKDoubleTXG0-IC:\Users\31615\AppData\Local\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-IC:\Users\31615\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32G030xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G030xx-o wkdoubletxg0\si24r1.o --omf_browse wkdoubletxg0\si24r1.crf --depend wkdoubletxg0\si24r1.d)
+I (..\Components\si24r1.h)(0x67DC1303)
 I (../Core/Inc/main.h)(0x67B08F69)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h)(0x679D89C8)
 I (../Core/Inc/stm32g0xx_hal_conf.h)(0x67B08F69)
@@ -1138,5 +1138,5 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5E8E3CC2)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5E8E3CC2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5E8E3CC2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5E8E3CC2)
-I (..\Components\system.h)(0x67DBF492)
+I (..\Components\system.h)(0x67DC130B)
 I (../Core/Inc/tim.h)(0x67D1880E)

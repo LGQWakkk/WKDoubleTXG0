@@ -3,33 +3,33 @@
 #include "si24r1.h"
 #include "serial.h"
 
-static uint8_t rf1_state = RF_STATE_FAILED;//SI24R1Ä£¿é1¹¤×÷×´Ì¬
-static uint8_t rf2_state = RF_STATE_FAILED;//SI24R1Ä£¿é2¹¤×÷×´Ì¬
+static uint8_t rf1_state = RF_STATE_FAILED;//SI24R1æ¨¡å—1å·¥ä½œçŠ¶æ€
+static uint8_t rf2_state = RF_STATE_FAILED;//SI24R1æ¨¡å—2å·¥ä½œçŠ¶æ€
 
 // RADIO BUFFER
 #define SI24R1_BUFFER_SIZE 32
-static uint8_t m1_tx_buffer[SI24R1_BUFFER_SIZE];//Ä£¿é1·¢ËÍ»º³åÇø
-static uint8_t m2_tx_buffer[SI24R1_BUFFER_SIZE];//Ä£¿é2·¢ËÍ»º³åÇø
-static uint8_t m1_rx_buffer[SI24R1_BUFFER_SIZE];//Ä£¿é1½ÓÊÕ»º³åÇø
-static uint8_t m2_rx_buffer[SI24R1_BUFFER_SIZE];//Ä£¿é2½ÓÊÕ»º³åÇø
+static uint8_t m1_tx_buffer[SI24R1_BUFFER_SIZE];//æ¨¡å—1å‘é€ç¼“å†²åŒº
+static uint8_t m2_tx_buffer[SI24R1_BUFFER_SIZE];//æ¨¡å—2å‘é€ç¼“å†²åŒº
+static uint8_t m1_rx_buffer[SI24R1_BUFFER_SIZE];//æ¨¡å—1æ¥æ”¶ç¼“å†²åŒº
+static uint8_t m2_rx_buffer[SI24R1_BUFFER_SIZE];//æ¨¡å—2æ¥æ”¶ç¼“å†²åŒº
 
-static uint8_t rf1_has_new_data_to_send = 0;   //ÔÚTXÄ£Ê½ÏÂ ÊÇ·ñÓĞĞÂÊı¾İ´ı·¢ËÍ
-static uint8_t rf1_is_sending_data = 0;        //ÔÚTXÄ£Ê½ÏÂ ÊÇ·ñÕıÔÚ·¢ËÍÊı¾İ
-static uint16_t rf1_wait_time_ms = 500;        //³¬³ö´ËÊ±¼äÃ»ÓĞÊÕµ½Êı¾İÈÏÎªÊÇ³¬Ê±
-static uint16_t rf1_timeout_count = 0;         //³¬Ê±¼ÆÊıÆ÷
+static uint8_t rf1_has_new_data_to_send = 0;   //åœ¨TXæ¨¡å¼ä¸‹ æ˜¯å¦æœ‰æ–°æ•°æ®å¾…å‘é€
+static uint8_t rf1_is_sending_data = 0;        //åœ¨TXæ¨¡å¼ä¸‹ æ˜¯å¦æ­£åœ¨å‘é€æ•°æ®
+static uint16_t rf1_wait_time_ms = 500;        //è¶…å‡ºæ­¤æ—¶é—´æ²¡æœ‰æ”¶åˆ°æ•°æ®è®¤ä¸ºæ˜¯è¶…æ—¶
+static uint16_t rf1_timeout_count = 0;         //è¶…æ—¶è®¡æ•°å™¨
 
-static uint8_t rf2_has_new_data_to_send = 0;   //ÔÚTXÄ£Ê½ÏÂ ÊÇ·ñÓĞĞÂÊı¾İ´ı·¢ËÍ
-static uint8_t rf2_is_sending_data = 0;        //ÔÚTXÄ£Ê½ÏÂ ÊÇ·ñÕıÔÚ·¢ËÍÊı¾İ
-static uint16_t rf2_wait_time_ms = 500;        //³¬³ö´ËÊ±¼äÃ»ÓĞÊÕµ½Êı¾İÈÏÎªÊÇ³¬Ê±
-static uint16_t rf2_timeout_count = 0;         //³¬Ê±¼ÆÊıÆ÷
+static uint8_t rf2_has_new_data_to_send = 0;   //åœ¨TXæ¨¡å¼ä¸‹ æ˜¯å¦æœ‰æ–°æ•°æ®å¾…å‘é€
+static uint8_t rf2_is_sending_data = 0;        //åœ¨TXæ¨¡å¼ä¸‹ æ˜¯å¦æ­£åœ¨å‘é€æ•°æ®
+static uint16_t rf2_wait_time_ms = 500;        //è¶…å‡ºæ­¤æ—¶é—´æ²¡æœ‰æ”¶åˆ°æ•°æ®è®¤ä¸ºæ˜¯è¶…æ—¶
+static uint16_t rf2_timeout_count = 0;         //è¶…æ—¶è®¡æ•°å™¨
 
-static uint8_t tick_update = 0;        //ÏµÍ³ÖĞ¶Ï±êÖ¾Î»
-static uint32_t system_time = 0;       //ÏµÍ³Ê±¼ä´Á(ms)
-static uint8_t overloop_flag = 0;      //´ËÖµÎª1±íÊ¾ÏµÍ³Ñ­»·³¬Ê± ÎŞ·¨Âú×ã1000Hz´¦ÀíÆµÂÊ
-static uint8_t system_init_flag = 0;   //ÏµÍ³ÊÇ·ñÒÑ¾­³õÊ¼»¯Íê±Ï
-static uint16_t tick_count = 0;        //ÏµÍ³Ê±ÖÓ¼ÆÊıÆ÷(0-100)
+static uint8_t tick_update = 0;        //ç³»ç»Ÿä¸­æ–­æ ‡å¿—ä½
+static uint32_t system_time = 0;       //ç³»ç»Ÿæ—¶é—´æˆ³(ms)
+// static uint8_t overloop_flag = 0;      //æ­¤å€¼ä¸º1è¡¨ç¤ºç³»ç»Ÿå¾ªç¯è¶…æ—¶ æ— æ³•æ»¡è¶³1000Hzå¤„ç†é¢‘ç‡
+static uint8_t system_init_flag = 0;   //ç³»ç»Ÿæ˜¯å¦å·²ç»åˆå§‹åŒ–å®Œæ¯•
+static uint16_t tick_count = 0;        //ç³»ç»Ÿæ—¶é’Ÿè®¡æ•°å™¨(0-100)
 
-// ÉèÖÃÎŞÏßÄ£¿éÄ£Ê½(½ö½ö×÷ÎªÄÚ²¿flagÊ¹ÓÃ)
+// è®¾ç½®æ— çº¿æ¨¡å—æ¨¡å¼(ä»…ä»…ä½œä¸ºå†…éƒ¨flagä½¿ç”¨)
 void set_rf_state(uint8_t index, uint8_t state)
 {
     if(index == M1){
@@ -38,7 +38,7 @@ void set_rf_state(uint8_t index, uint8_t state)
         rf2_state = state;
     }
 }
-// »ñÈ¡ÎŞÏßÄ£¿éÄ£Ê½
+// è·å–æ— çº¿æ¨¡å—æ¨¡å¼
 uint8_t get_rf_state(uint8_t index)
 {
     if(index == M1){
@@ -50,43 +50,43 @@ uint8_t get_rf_state(uint8_t index)
     }
 }
 
-// ÏòSI24R1·¢ËÍ»º³åÇøĞ´ÈëÒª·¢ËÍµÄÊı¾İ°ü
-// ·µ»ØSUCCESS±íÊ¾³É¹¦Ğ´Èë»º³åÇø
-// ·µ»ØFAIL±íÊ¾»º³åÇøÒÑÂú ±¾´ÎÊı¾İ°ü¸²Ğ´Ö®Ç°»º³åÇøÖĞÊı¾İ
+// å‘SI24R1å‘é€ç¼“å†²åŒºå†™å…¥è¦å‘é€çš„æ•°æ®åŒ…
+// è¿”å›SUCCESSè¡¨ç¤ºæˆåŠŸå†™å…¥ç¼“å†²åŒº
+// è¿”å›FAILè¡¨ç¤ºç¼“å†²åŒºå·²æ»¡ æœ¬æ¬¡æ•°æ®åŒ…è¦†å†™ä¹‹å‰ç¼“å†²åŒºä¸­æ•°æ®
 uint8_t write_tx_buffer(uint8_t index, uint8_t *data)
 {
     if(index == M1){
         for(uint8_t i=0; i<SI24R1_BUFFER_SIZE; i++){
             m1_tx_buffer[i] = data[i];
         }
-        if(rf1_has_new_data_to_send){//»¹ÓĞÊı¾İÎ´¶ÁÈ¡ ¸²Ğ´
+        if(rf1_has_new_data_to_send){//è¿˜æœ‰æ•°æ®æœªè¯»å– è¦†å†™
             return RETURN_FAILURE;
         }else{
-            rf1_has_new_data_to_send = 1;//×¼±¸·¢ËÍ
+            rf1_has_new_data_to_send = 1;//å‡†å¤‡å‘é€
             return RETURN_SUCCESS;
         }
     }else if(index == M2){
         for(uint8_t i=0; i<SI24R1_BUFFER_SIZE; i++){
             m2_tx_buffer[i] = data[i];
         }
-        if(rf2_has_new_data_to_send){//»¹ÓĞÊı¾İÎ´¶ÁÈ¡ ¸²Ğ´
+        if(rf2_has_new_data_to_send){//è¿˜æœ‰æ•°æ®æœªè¯»å– è¦†å†™
             return RETURN_FAILURE;
         }else{
-            rf2_has_new_data_to_send = 1;//×¼±¸·¢ËÍ
+            rf2_has_new_data_to_send = 1;//å‡†å¤‡å‘é€
             return RETURN_SUCCESS;
         }
-    }else{//ÎŞĞ§Ë÷Òı
+    }else{//æ— æ•ˆç´¢å¼•
         return RETURN_FAILURE;
     }
 }
 
-// 1000Hz ÏµÍ³Ê±»ùÖĞ¶Ï»Øµ÷º¯Êı
+// 1000Hz ç³»ç»Ÿæ—¶åŸºä¸­æ–­å›è°ƒå‡½æ•°
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     if (htim == (&SYSTEM_TICK_HANDLE))
     {
         if(tick_update){
-            overloop_flag = 1;//loopÃ»ÓĞÀ´µÃ¼°´¦ÀíÍê±Ï¾ÍÔÙ´Î½øÈëÖĞ¶Ï ·¢ÉúÁËoverloop
+            // overloop_flag = 1;//loopæ²¡æœ‰æ¥å¾—åŠå¤„ç†å®Œæ¯•å°±å†æ¬¡è¿›å…¥ä¸­æ–­ å‘ç”Ÿäº†overloop
         }
         tick_update = 1;
         system_time ++;
@@ -99,22 +99,22 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     }
 }
 
-// ¸ù¾İÄ£¿é×´Ì¬¸üĞÂLED×´Ì¬
+// æ ¹æ®æ¨¡å—çŠ¶æ€æ›´æ–°LEDçŠ¶æ€
 void handle_led_state(void)
 {
     switch (rf1_state)
     {
-    case RF_STATE_TX_RUNNING://³£ÁÁ±íÊ¾´¦ÓÚ·¢ÉäÄ£Ê½
+    case RF_STATE_TX_RUNNING://å¸¸äº®è¡¨ç¤ºå¤„äºå‘å°„æ¨¡å¼
         LED1_ON();
         break;
-    case RF_STATE_RX_WAITING://1sÖÜÆÚÉÁË¸±íÊ¾´¦ÓÚ½ÓÊÕÄ£Ê½ µ«ÊÇÃ»ÓĞÊÕµ½ĞÅºÅ
+    case RF_STATE_RX_WAITING://1så‘¨æœŸé—ªçƒè¡¨ç¤ºå¤„äºæ¥æ”¶æ¨¡å¼ ä½†æ˜¯æ²¡æœ‰æ”¶åˆ°ä¿¡å·
         if(tick_count <= 500){
             LED1_ON();
         }else{
             LED1_OFF();
         }
         break;
-    case RF_STATE_RX_RUNNING://¶ÌÔİÉÁË¸±íÊ¾´¦ÓÚ½ÓÊÕÄ£Ê½ ÕıÔÚ½ÓÊÕĞÅºÅ
+    case RF_STATE_RX_RUNNING://çŸ­æš‚é—ªçƒè¡¨ç¤ºå¤„äºæ¥æ”¶æ¨¡å¼ æ­£åœ¨æ¥æ”¶ä¿¡å·
         if(tick_count==0 || tick_count==130){
             LED1_ON();
         }
@@ -122,7 +122,7 @@ void handle_led_state(void)
             LED1_OFF();
         }
         break;
-    case RF_STATE_FAILED://Ï¨Ãğ±íÊ¾Ä£¿é³õÊ¼»¯Ê§°Ü
+    case RF_STATE_FAILED://ç†„ç­è¡¨ç¤ºæ¨¡å—åˆå§‹åŒ–å¤±è´¥
         LED1_OFF();
         break;
     default:
@@ -130,17 +130,17 @@ void handle_led_state(void)
     }
     switch (rf2_state)
     {
-        case RF_STATE_TX_RUNNING://³£ÁÁ±íÊ¾´¦ÓÚ·¢ÉäÄ£Ê½
+        case RF_STATE_TX_RUNNING://å¸¸äº®è¡¨ç¤ºå¤„äºå‘å°„æ¨¡å¼
             LED2_ON();
             break;
-        case RF_STATE_RX_WAITING://1sÖÜÆÚÉÁË¸±íÊ¾´¦ÓÚ½ÓÊÕÄ£Ê½ µ«ÊÇÃ»ÓĞÊÕµ½ĞÅºÅ
+        case RF_STATE_RX_WAITING://1så‘¨æœŸé—ªçƒè¡¨ç¤ºå¤„äºæ¥æ”¶æ¨¡å¼ ä½†æ˜¯æ²¡æœ‰æ”¶åˆ°ä¿¡å·
             if(tick_count <= 500){
                 LED2_ON();
             }else{
                 LED2_OFF();
             }
             break;
-        case RF_STATE_RX_RUNNING://¶ÌÔİÉÁË¸±íÊ¾´¦ÓÚ½ÓÊÕÄ£Ê½ ÕıÔÚ½ÓÊÕĞÅºÅ
+        case RF_STATE_RX_RUNNING://çŸ­æš‚é—ªçƒè¡¨ç¤ºå¤„äºæ¥æ”¶æ¨¡å¼ æ­£åœ¨æ¥æ”¶ä¿¡å·
             if(tick_count==0 || tick_count==130){
                 LED2_ON();
             }
@@ -148,7 +148,7 @@ void handle_led_state(void)
                 LED2_OFF();
             }
             break;
-        case RF_STATE_FAILED://Ï¨Ãğ±íÊ¾Ä£¿é³õÊ¼»¯Ê§°Ü
+        case RF_STATE_FAILED://ç†„ç­è¡¨ç¤ºæ¨¡å—åˆå§‹åŒ–å¤±è´¥
             LED2_OFF();
             break;
         default:
@@ -156,9 +156,9 @@ void handle_led_state(void)
     }
 }
 
-// ºìÍâĞÅ±ê³õÊ¼»¯
-// PWMÆµÂÊ1000Hz
-// ±È½ÏÖµ0-999
+// çº¢å¤–ä¿¡æ ‡åˆå§‹åŒ–
+// PWMé¢‘ç‡1000Hz
+// æ¯”è¾ƒå€¼0-999
 void ir_marker_init(void)
 {
     HAL_TIM_Base_Start(&IR_PWM_TIMER_HANDLE);
@@ -168,9 +168,9 @@ void ir_marker_init(void)
     ir_marker_set_intensity(1, 0);
 }
 
-// ÉèÖÃºìÍâĞÅ±êÁÁ¶È
+// è®¾ç½®çº¢å¤–ä¿¡æ ‡äº®åº¦
 // index: 0 or 1
-// intensity: PWMÕ¼¿Õ±È 0-999
+// intensity: PWMå ç©ºæ¯” 0-999
 void ir_marker_set_intensity(uint8_t index, int16_t intensity)
 {
     if(intensity > 999){
@@ -183,7 +183,7 @@ void ir_marker_set_intensity(uint8_t index, int16_t intensity)
     }
 }
 
-// ³õÊ¼»¯SI24R1
+// åˆå§‹åŒ–SI24R1
 void radio_init(void)
 {
     // Check Connection
@@ -191,6 +191,11 @@ void radio_init(void)
         LED1_ON();
         si24r1_init(M1);
         si24r1_set_power(M1, 5);
+
+        // è®¾ç½®ä¿¡é“
+        si24r1_set_channel(M1, 60);//å‘å°„ç«¯M1ä½œä¸ºå‘å°„æ¨¡å¼ ä½¿ç”¨ä¿¡é“10
+        // si24r1_set_channel(M1, 100);//æ¥æ”¶ç«¯M1ä½œä¸ºå‘å°„æ¨¡å¼ ä½¿ç”¨ä¿¡é“100
+
         // si24r1_set_mode(M1, MODE_RX);
         si24r1_set_mode(M1, MODE_TX);
         // rf1_state = RF_STATE_RX_WAITING;
@@ -203,6 +208,11 @@ void radio_init(void)
         LED2_ON();
         si24r1_init(M2);
         si24r1_set_power(M2, 5);
+
+        // è®¾ç½®ä¿¡é“
+        si24r1_set_channel(M2, 100);//å‘å°„ç«¯M2ä½œä¸ºæ¥æ”¶æ¨¡å¼ ä½¿ç”¨ä¿¡é“100
+        // si24r1_set_channel(M2, 60);//æ¥æ”¶ç«¯M1ä½œä¸ºæ¥æ”¶æ¨¡å¼ ä½¿ç”¨ä¿¡é“10
+
         // si24r1_set_mode(M2, MODE_TX);
         si24r1_set_mode(M2, MODE_RX);
         rf2_state = RF_STATE_RX_WAITING;
@@ -221,41 +231,43 @@ void system_init(void)
     radio_init();
     serial_init();
     
-    HAL_TIM_Base_Start_IT(&SYSTEM_TICK_HANDLE);// Æô¶¯ÏµÍ³Ê±»ù
+    HAL_TIM_Base_Start_IT(&SYSTEM_TICK_HANDLE);// å¯åŠ¨ç³»ç»Ÿæ—¶åŸº
     system_init_flag = 1;
 
     // ir_marker_set_intensity(0, 200);
     // ir_marker_set_intensity(1, 200);
 }
 
-void system_loop(void)//1000Hz
+void system_loop(void)
 {
     if(tick_update && system_init_flag){
 ////////////////////////////////////////////////////////////////////////////////////////////
         // M1
-        if(rf1_state == RF_STATE_TX_RUNNING){//´¦ÓÚ·¢ÉäÄ£Ê½
-            if(rf1_has_new_data_to_send && !rf1_is_sending_data){//ÓĞĞÂÊı¾İ´ı·¢ËÍÇÒ¿ÕÏĞ
+        if(rf1_state == RF_STATE_TX_RUNNING){//å¤„äºå‘å°„æ¨¡å¼
+            if(rf1_has_new_data_to_send && !rf1_is_sending_data){//æœ‰æ–°æ•°æ®å¾…å‘é€ä¸”ç©ºé—²
+            // if(rf1_has_new_data_to_send){//æœ‰æ–°æ•°æ®å¾…å‘é€
                 rf1_has_new_data_to_send = 0;
                 rf1_is_sending_data = 1;
-                si24r1_fast_tx(M1, m1_tx_buffer);//¿ªÆô·¢ËÍ
-            }else if(rf1_is_sending_data){//´¦ÓÚµÈ´ı·¢ËÍÍê±Ï
-                if(si24r1_fast_check(M1) == RETURN_SUCCESS){ //·¢ËÍÍê±Ï ¼ì²âµ½ÖĞ¶Ï
+                si24r1_fast_tx(M1, m1_tx_buffer);//å¼€å¯å‘é€
+            }else if(rf1_is_sending_data){//å¤„äºç­‰å¾…å‘é€å®Œæ¯•
+                if(si24r1_fast_check(M1) == RETURN_SUCCESS){ //å‘é€å®Œæ¯• æ£€æµ‹åˆ°ä¸­æ–­
+                    si24r1_fast_clear(M1);//20250321 Add
                     rf1_is_sending_data = 0;
                 }
             }
-        }else if(rf1_state == RF_STATE_RX_WAITING || rf1_state == RF_STATE_RX_RUNNING){//½ÓÊÕÄ£Ê½
-            if(si24r1_fast_check(M1) == RETURN_SUCCESS){//½ÓÊÕµ½Êı¾İ
+        }else if(rf1_state == RF_STATE_RX_WAITING || rf1_state == RF_STATE_RX_RUNNING){//æ¥æ”¶æ¨¡å¼
+            if(si24r1_fast_check(M1) == RETURN_SUCCESS){//æ¥æ”¶åˆ°æ•°æ®
                 uint8_t len = si24r1_fast_rx(M1, m1_rx_buffer);
                 if(len == SI24R1_BUFFER_SIZE){//32Bytes OK
                     rf1_state = RF_STATE_RX_RUNNING;
-                    //´¦Àí½ÓÊÕµ½µÄÊı¾İ
-                    uart_tx_dma(m1_rx_buffer);//×ª·¢µ½UART
+                    //å¤„ç†æ¥æ”¶åˆ°çš„æ•°æ®
+                    uart_tx_dma(m1_rx_buffer);//è½¬å‘åˆ°UART
                 }
                 rf1_timeout_count = 0;
-            }else{//´ËÊ±Ã»ÓĞÊÕµ½Êı¾İ
+            }else{//æ­¤æ—¶æ²¡æœ‰æ”¶åˆ°æ•°æ®
                 rf1_timeout_count ++;
-                if(rf1_timeout_count >= rf1_wait_time_ms){//³¬Ê±
-                    si24r1_fast_clear(M1);// Çå¿ÕÖĞ¶Ï
+                if(rf1_timeout_count >= rf1_wait_time_ms){//è¶…æ—¶
+                    si24r1_fast_clear(M1);// æ¸…ç©ºä¸­æ–­
                     rf1_state = RF_STATE_RX_WAITING;
                     rf1_timeout_count = 0;
                 }
@@ -263,35 +275,37 @@ void system_loop(void)//1000Hz
         }
 
         //M2
-        if(rf2_state == RF_STATE_TX_RUNNING){//´¦ÓÚ·¢ÉäÄ£Ê½
-            if(rf2_has_new_data_to_send && !rf2_is_sending_data){//ÓĞĞÂÊı¾İ´ı·¢ËÍÇÒ¿ÕÏĞ
+        if(rf2_state == RF_STATE_TX_RUNNING){//å¤„äºå‘å°„æ¨¡å¼
+            if(rf2_has_new_data_to_send && !rf2_is_sending_data){//æœ‰æ–°æ•°æ®å¾…å‘é€ä¸”ç©ºé—²
+            // if(rf2_has_new_data_to_send){//æœ‰æ–°æ•°æ®å¾…å‘é€
                 rf2_has_new_data_to_send = 0;
                 rf2_is_sending_data = 1;
-                si24r1_fast_tx(M2, m2_tx_buffer);//¿ªÆô·¢ËÍ
-            }else if(rf2_is_sending_data){//´¦ÓÚµÈ´ı·¢ËÍÍê±Ï
-                if(si24r1_fast_check(M2) == RETURN_SUCCESS){ //·¢ËÍÍê±Ï ¼ì²âµ½ÖĞ¶Ï
+                si24r1_fast_tx(M2, m2_tx_buffer);//å¼€å¯å‘é€
+            }else if(rf2_is_sending_data){//å¤„äºç­‰å¾…å‘é€å®Œæ¯•
+                if(si24r1_fast_check(M2) == RETURN_SUCCESS){ //å‘é€å®Œæ¯• æ£€æµ‹åˆ°ä¸­æ–­
+                    si24r1_fast_clear(M2);//20250321 Add
                     rf2_is_sending_data = 0;
                 }
             }
-        }else if(rf2_state == RF_STATE_RX_WAITING || rf2_state == RF_STATE_RX_RUNNING){//½ÓÊÕÄ£Ê½
-            if(si24r1_fast_check(M2) == RETURN_SUCCESS){//½ÓÊÕµ½Êı¾İ
+        }else if(rf2_state == RF_STATE_RX_WAITING || rf2_state == RF_STATE_RX_RUNNING){//æ¥æ”¶æ¨¡å¼
+            if(si24r1_fast_check(M2) == RETURN_SUCCESS){//æ¥æ”¶åˆ°æ•°æ®
                 uint8_t len = si24r1_fast_rx(M2, m2_rx_buffer);
                 if(len == SI24R1_BUFFER_SIZE){//32Bytes OK
                     rf2_state = RF_STATE_RX_RUNNING;
-                    //´¦Àí½ÓÊÕµ½µÄÊı¾İ
-                    uart_tx_dma(m2_rx_buffer);//×ª·¢µ½UART
+                    //å¤„ç†æ¥æ”¶åˆ°çš„æ•°æ®
+                    uart_tx_dma(m2_rx_buffer);//è½¬å‘åˆ°UART
                 }
                 rf2_timeout_count = 0;
-            }else{//´ËÊ±Ã»ÓĞÊÕµ½Êı¾İ
+            }else{//æ­¤æ—¶æ²¡æœ‰æ”¶åˆ°æ•°æ®
                 rf2_timeout_count ++;
-                if(rf2_timeout_count >= rf2_wait_time_ms){//³¬Ê±
-                    si24r1_fast_clear(M2);// Çå¿ÕÖĞ¶Ï
+                if(rf2_timeout_count >= rf2_wait_time_ms){//è¶…æ—¶
+                    si24r1_fast_clear(M2);// æ¸…ç©ºä¸­æ–­
                     rf2_state = RF_STATE_RX_WAITING;
                     rf2_timeout_count = 0;
                 }
             }
         }
 ////////////////////////////////////////////////////////////////////////////////////////////
-    tick_update = 0;//·ÅÖÃÔÚ´¦ÀíÄ©Î²ÒÔ¼ì²âoverloop
+    tick_update = 0;//æ”¾ç½®åœ¨å¤„ç†æœ«å°¾ä»¥æ£€æµ‹overloop
     }
 }

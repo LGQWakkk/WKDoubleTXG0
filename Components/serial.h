@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-// ½ÓÊÕ×´Ì¬»ú×´Ì¬
+// æ¥æ”¶çŠ¶æ€æœºçŠ¶æ€
 #define RX_WAITING_HEAD 0
 #define RX_WAITING_TAIL 1
 #define RX_DONE 2
@@ -23,7 +23,7 @@
 #define ALL_DATA_FRAME_HEAD 0xD3
 #define ALL_DATA_FRAME_TAIL 0x53
 
-// ÅäÖÃÊı¾İ°üĞ­Òé
+// é…ç½®æ•°æ®åŒ…åè®®
 #define CONFIG_MODE_INDEX       1
 #define CONFIG_POWER_INDEX      2
 #define CONFIG_CHANNEL_INDEX    3

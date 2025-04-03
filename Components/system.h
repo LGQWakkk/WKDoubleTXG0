@@ -20,12 +20,12 @@
 #define IR1_PWM_CHANNEL TIM_CHANNEL_1
 #define IR2_PWM_CHANNEL TIM_CHANNEL_4
 
-// LEDָʾ�ƿ����߼�
-#define RF_STATE_TX_RUNNING 0  // ���ڷ���ģʽ
-#define RF_STATE_RX_WAITING 1  // ���ڽ���ģʽ(û���յ��ź�)
-#define RF_STATE_RX_RUNNING 2  // ���ڽ���ģʽ(���ڽ����ź�)
-#define RF_STATE_FAILED     3  // ģ���ʼ��ʧ��(����Ӳ������)
-#define RF_STATE_INVALID    4  // ��Ч״̬
+// LED指示灯控制逻辑
+#define RF_STATE_TX_RUNNING 0  // 处于发射模式
+#define RF_STATE_RX_WAITING 1  // 处于接收模式(没有收到信号)
+#define RF_STATE_RX_RUNNING 2  // 处于接收模式(正在接收信号)
+#define RF_STATE_FAILED     3  // 模块初始化失败(存在硬件问题)
+#define RF_STATE_INVALID    4  // 无效状态
 
 void set_rf_state(uint8_t index, uint8_t state);
 uint8_t get_rf_state(uint8_t index);

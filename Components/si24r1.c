@@ -513,9 +513,11 @@ uint8_t si24r1_fast_tx(uint8_t index, uint8_t *tx_buffer)
 {
     CS_LOW
     spi_read_write_byte(WR_TX_PLOAD_NACK);	//发送命令
-    for(uint8_t i=0; i<32; i++){
-        spi_read_write_byte(tx_buffer[i]);		//发送数据
-    }
+    // for(uint8_t i=0; i<32; i++){
+    //     spi_read_write_byte(tx_buffer[i]);		//发送数据
+    // }
+    
+    HAL_SPI_Transmit(&SI24R1_SPI_HANDLE, tx_buffer, 32, HAL_MAX_DELAY);//20250321 Faster
     CS_HIGH
     return RETURN_SUCCESS;
 }

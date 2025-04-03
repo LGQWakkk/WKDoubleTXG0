@@ -3,38 +3,38 @@
 #include "si24r1.h"
 #include "system.h"
 
-uint8_t uart_dma_buf[1] = {0};//DMAµ¥×Ö½Ú½ÓÊÕ»º³åÇø
+uint8_t uart_dma_buf[1] = {0};//DMAå•å­—èŠ‚æ¥æ”¶ç¼“å†²åŒº
 // RX BUFFER
-#define UART_RX_BUFFER_SIZE 32   // ËùÓĞÊı¾İ°ü³¤¶È¾ùÎª32×Ö½Ú
+#define UART_RX_BUFFER_SIZE 32   // æ‰€æœ‰æ•°æ®åŒ…é•¿åº¦å‡ä¸º32å­—èŠ‚
 static uint8_t uart_rx_buffer[UART_RX_BUFFER_SIZE];
 static uint8_t uart_rx_buffer_ptr = 0;
 // TX BUFFER
-#define UART_TX_BUFFER_SIZE 32   // ËùÓĞÊı¾İ°ü³¤¶È¾ùÎª32×Ö½Ú
+#define UART_TX_BUFFER_SIZE 32   // æ‰€æœ‰æ•°æ®åŒ…é•¿åº¦å‡ä¸º32å­—èŠ‚
 static uint8_t uart_tx_buffer[UART_TX_BUFFER_SIZE];
-static uint8_t is_uart_tx_dma_sending = 0;//UART DMAÊÇ·ñÕıÔÚ·¢ËÍÊı¾İ
+static uint8_t is_uart_tx_dma_sending = 0;//UART DMAæ˜¯å¦æ­£åœ¨å‘é€æ•°æ®
 // RX STATE
 static uint8_t uart_rx_state = RX_WAITING_HEAD;
 
-// ´®¿Ú·¢ËÍ½ÓÊÕ³õÊ¼»¯
+// ä¸²å£å‘é€æ¥æ”¶åˆå§‹åŒ–
 void serial_init(void)
 {
-    // ¿ªÊ¼DMA½ÓÊÕ
+    // å¼€å§‹DMAæ¥æ”¶
     HAL_UART_Receive_DMA(&huart1, uart_dma_buf, 1);
 }
 
-// UART´®¿ÚDMA½ÓÊÕ»Øµ÷º¯Êı
+// UARTä¸²å£DMAæ¥æ”¶å›è°ƒå‡½æ•°
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
     if(huart == &huart1)
     {
-        // µ÷ÓÃµ¥×Ö½Ú½ÓÊÕ´¦Àí»Øµ÷º¯Êı
+        // è°ƒç”¨å•å­—èŠ‚æ¥æ”¶å¤„ç†å›è°ƒå‡½æ•°
         handle_serial_rx(uart_dma_buf[0]);
         uart_dma_buf[0] = 0;
-        HAL_UART_Receive_DMA(&huart1, uart_dma_buf, 1);//ÖØĞÂ×¼±¸½ÓÊÕ
+        HAL_UART_Receive_DMA(&huart1, uart_dma_buf, 1);//é‡æ–°å‡†å¤‡æ¥æ”¶
     }
 }
 
-// UART´®¿ÚDMA·¢ËÍÍê³É»Øµ÷º¯Êı
+// UARTä¸²å£DMAå‘é€å®Œæˆå›è°ƒå‡½æ•°
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
     if(huart == &huart1)
     {
@@ -42,24 +42,24 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
     }
 }
 
-// ´®¿ÚDMA·¢ËÍÊı¾İ
-// RETURN SUCCESS: DMA¿ÕÏĞ ¿ªÊ¼·¢ËÍ
-// RETURN FAILURE: DMAÃ¦ µÈ´ı·¢ËÍÍê³É ±¾´Î·¢ËÍÎŞĞ§
+// ä¸²å£DMAå‘é€æ•°æ®
+// RETURN SUCCESS: DMAç©ºé—² å¼€å§‹å‘é€
+// RETURN FAILURE: DMAå¿™ ç­‰å¾…å‘é€å®Œæˆ æœ¬æ¬¡å‘é€æ— æ•ˆ
 uint8_t uart_tx_dma(uint8_t *buffer)
 {
     if(is_uart_tx_dma_sending == 1){
-        return RETURN_FAILURE;//DMAÃ¦ µÈ´ı·¢ËÍÍê³É ±¾´Î·¢ËÍÎŞĞ§
+        return RETURN_FAILURE;//DMAå¿™ ç­‰å¾…å‘é€å®Œæˆ æœ¬æ¬¡å‘é€æ— æ•ˆ
     }else{
         for(uint8_t i=0; i<32; i++){
             uart_tx_buffer[i] = buffer[i];//Copy
         }
         HAL_UART_Transmit_DMA(&huart1, uart_tx_buffer, 32);
         is_uart_tx_dma_sending = 1;
-        return RETURN_SUCCESS;//DMA¿ÕÏĞ ¿ªÊ¼·¢ËÍ
+        return RETURN_SUCCESS;//DMAç©ºé—² å¼€å§‹å‘é€
     }
 }
 
-// Çå¿Õ´®¿Ú½ÓÊÕ»º³åÇø
+// æ¸…ç©ºä¸²å£æ¥æ”¶ç¼“å†²åŒº
 void clear_uart_rx_buffer(void)
 {
     for(uint8_t i=0; i<UART_RX_BUFFER_SIZE; i++){
@@ -68,12 +68,12 @@ void clear_uart_rx_buffer(void)
     uart_rx_buffer_ptr = 0;
 }
 
-// µ¥×Ö½Ú´®¿Ú½ÓÊÕ»Øµ÷º¯Êı
+// å•å­—èŠ‚ä¸²å£æ¥æ”¶å›è°ƒå‡½æ•°
 uint8_t handle_serial_rx(uint8_t data)
 {
     switch (uart_rx_state)
     {
-    case RX_WAITING_HEAD://µÈ´ıÊı¾İ°üÖ¡Í·
+    case RX_WAITING_HEAD://ç­‰å¾…æ•°æ®åŒ…å¸§å¤´
         if(data == M1_CONFIG_FRAME_HEAD || data == M2_CONFIG_FRAME_HEAD || data == ALL_CONFIG_FRAME_HEAD || data == M1_DATA_FRAME_HEAD || data == M2_DATA_FRAME_HEAD || data == ALL_DATA_FRAME_HEAD){
             clear_uart_rx_buffer();
             uart_rx_buffer[uart_rx_buffer_ptr] = data;
@@ -81,11 +81,11 @@ uint8_t handle_serial_rx(uint8_t data)
             uart_rx_state = RX_WAITING_TAIL;
         }
         break;
-    case RX_WAITING_TAIL://µÈ´ıÊı¾İ°üÖ¡Î²
-        if(data == M1_CONFIG_FRAME_TAIL || data == M2_CONFIG_FRAME_TAIL || data == ALL_CONFIG_FRAME_TAIL || data == M1_DATA_FRAME_TAIL || data == M2_DATA_FRAME_TAIL || data == ALL_DATA_FRAME_TAIL){
-            uart_rx_buffer[uart_rx_buffer_ptr] = data;//Ö¡Î²
+    case RX_WAITING_TAIL://ç­‰å¾…æ•°æ®åŒ…å¸§å°¾
+        if((uart_rx_buffer_ptr == 31) && (data == M1_CONFIG_FRAME_TAIL || data == M2_CONFIG_FRAME_TAIL || data == ALL_CONFIG_FRAME_TAIL || data == M1_DATA_FRAME_TAIL || data == M2_DATA_FRAME_TAIL || data == ALL_DATA_FRAME_TAIL)){
+            uart_rx_buffer[uart_rx_buffer_ptr] = data;//å¸§å°¾
             uart_rx_buffer_ptr ++;
-            // ½ÓÊÕÍê±Ï ´¦ÀíÊı¾İ°ü
+            // æ¥æ”¶å®Œæ¯• å¤„ç†æ•°æ®åŒ…
             if(uart_rx_buffer[0] == M1_CONFIG_FRAME_HEAD || uart_rx_buffer[0] == M2_CONFIG_FRAME_HEAD || uart_rx_buffer[0] == ALL_CONFIG_FRAME_HEAD){
                 // Config
                 if(uart_rx_buffer[0] == M1_CONFIG_FRAME_HEAD && uart_rx_buffer[31] == M1_CONFIG_FRAME_TAIL){
@@ -98,34 +98,34 @@ uint8_t handle_serial_rx(uint8_t data)
                 }
             }else if(uart_rx_buffer[0] == M1_DATA_FRAME_HEAD || uart_rx_buffer[0] == M2_DATA_FRAME_HEAD || uart_rx_buffer[0] == ALL_DATA_FRAME_HEAD){
                 // Data
-                // È·±£Ä£¿é´¦ÓÚ·¢ÉäÄ£Ê½²Å¿ÉÒÔ·¢ËÍ
+                // ç¡®ä¿æ¨¡å—å¤„äºå‘å°„æ¨¡å¼æ‰å¯ä»¥å‘é€
                 if(uart_rx_buffer[0] == M1_DATA_FRAME_HEAD && uart_rx_buffer[31] == M1_DATA_FRAME_TAIL){
                     if(get_rf_state(M1) == RF_STATE_TX_RUNNING){
-                        // M1·¢ËÍÊı¾İ°ü
+                        // M1å‘é€æ•°æ®åŒ…
                         write_tx_buffer(M1, uart_rx_buffer);
                     }
                 }else if(uart_rx_buffer[0] == M2_DATA_FRAME_HEAD && uart_rx_buffer[31] == M2_DATA_FRAME_TAIL){
                     if(get_rf_state(M2) == RF_STATE_TX_RUNNING){
-                        // M2·¢ËÍÊı¾İ°ü
+                        // M2å‘é€æ•°æ®åŒ…
                         write_tx_buffer(M2, uart_rx_buffer);
                     }
                 }else if(uart_rx_buffer[0] == ALL_DATA_FRAME_HEAD && uart_rx_buffer[31] == ALL_DATA_FRAME_TAIL){
                     if(get_rf_state(M1) == RF_STATE_TX_RUNNING && get_rf_state(M2) == RF_STATE_TX_RUNNING){
-                        // M1 M2·¢ËÍÊı¾İ°ü
+                        // M1 M2å‘é€æ•°æ®åŒ…
                         write_tx_buffer(M1, uart_rx_buffer);
                         write_tx_buffer(M2, uart_rx_buffer);
                     }
                 }
             }else{
-                // ´íÎóÊı¾İ°ü
+                // é”™è¯¯æ•°æ®åŒ…
             }
             clear_uart_rx_buffer();
-            uart_rx_state = RX_WAITING_HEAD;//¸´Î»
-        }else{//»¹Ã»ÓĞÊÕµ½Ö¡Î²
-            if(uart_rx_buffer_ptr >= (UART_RX_BUFFER_SIZE-1)){//±¾Ó¦¸Ã½ÓÊÕµ½Ö¡Î² µ«ÊÇÃ»ÓĞ ½ÓÊÕ´íÎó
+            uart_rx_state = RX_WAITING_HEAD;//å¤ä½
+        }else{//è¿˜æ²¡æœ‰æ”¶åˆ°å¸§å°¾
+            if(uart_rx_buffer_ptr >= (UART_RX_BUFFER_SIZE-1)){//æœ¬åº”è¯¥æ¥æ”¶åˆ°å¸§å°¾ ä½†æ˜¯æ²¡æœ‰ æ¥æ”¶é”™è¯¯
                 clear_uart_rx_buffer();
-                uart_rx_state = RX_WAITING_HEAD;//ÖØĞÂ×¼±¸½ÓÊÕ
-            }else{//½ÓÊÕ¹ı³ÌÖĞ ±£´æÊı¾İµ½»º³åÇø
+                uart_rx_state = RX_WAITING_HEAD;//é‡æ–°å‡†å¤‡æ¥æ”¶
+            }else{//æ¥æ”¶è¿‡ç¨‹ä¸­ ä¿å­˜æ•°æ®åˆ°ç¼“å†²åŒº
                 uart_rx_buffer[uart_rx_buffer_ptr] = data;
                 uart_rx_buffer_ptr ++;
             }
@@ -136,7 +136,7 @@ uint8_t handle_serial_rx(uint8_t data)
     return RETURN_SUCCESS;
 }
 
-// ´¦ÀíÅäÖÃÊı¾İ°ü
+// å¤„ç†é…ç½®æ•°æ®åŒ…
 uint8_t handle_rf_config(uint8_t index, uint8_t *buf)
 {
     if(index != M1 && index != M2){
@@ -163,7 +163,7 @@ uint8_t handle_rf_config(uint8_t index, uint8_t *buf)
     si24r1_set_power(index, buf[CONFIG_POWER_INDEX]);
 
     // set channel
-    if(buf[CONFIG_CHANNEL_INDEX] > 125){//×î´óÖ§³Ö126¸öĞÅµÀ 2400MHz ~ 2525MHz
+    if(buf[CONFIG_CHANNEL_INDEX] > 125){//æœ€å¤§æ”¯æŒ126ä¸ªä¿¡é“ 2400MHz ~ 2525MHz
         return RETURN_FAILURE;
     }
     si24r1_set_channel(index, buf[CONFIG_CHANNEL_INDEX]);
@@ -183,13 +183,13 @@ uint8_t handle_rf_config(uint8_t index, uint8_t *buf)
     si24r1_set_tx_addr(index, (uint8_t*)(buf[CONFIG_TX_ADDR_INDEX]), 5);
 
     // set rx address
-    uint8_t rx_addr_tmp[5];//½ÓÊÕÍ¨µÀ0-Í¨µÀ5¹²ÓÃÇ°ËÄ¸ö×Ö½ÚµØÖ·
+    uint8_t rx_addr_tmp[5];//æ¥æ”¶é€šé“0-é€šé“5å…±ç”¨å‰å››ä¸ªå­—èŠ‚åœ°å€
     for(uint8_t i=0;i<5;i++){
         rx_addr_tmp[i] = buf[CONFIG_RX0_ADDR_INDEX+i];
     }
     si24r1_set_rx_addr(index, 0, rx_addr_tmp, 5);
     for(uint8_t i=0;i<5;i++){
-        rx_addr_tmp[4] = buf[CONFIG_RX1_ADDR_INDEX+i];//¸üĞÂ×îºóÒ»¸ö×Ö½Ú
+        rx_addr_tmp[4] = buf[CONFIG_RX1_ADDR_INDEX+i];//æ›´æ–°æœ€åä¸€ä¸ªå­—èŠ‚
         si24r1_set_rx_addr(index, 1+i, rx_addr_tmp, 5);
     }
 

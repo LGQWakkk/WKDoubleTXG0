@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 // 20250320 Wakkk
 
 #include "main.h"
